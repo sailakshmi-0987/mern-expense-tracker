@@ -1,22 +1,25 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const {isBlacklisted} = require("../utils/tokenBlackList");
+const { isBlacklisted } = require("../utils/tokenBlackList");
 
-const protect = async(req,res,next)=>{
-    token = req.headers.authorization;
-    if(isBlacklisted){
-        res.send(400).json({message:"Token is invalid or loggedOut!!"});
+const protect = async (req, res, next) => {
+    const token = req.cookies.token; // <-- read from cookie
+
+    if (!token) {
+        return res.status(401).json({ message: "Not Authorized, No token!" });
     }
-    if(token && token.startsWith('Bearer')){
-        try{
-            const decoded = jwt.verify(token.split(' ')[1],process.env.JWT_SECRET);
-            req.user = await User.findOne(decoded.id).select("-password");
-            next();
-        }catch(err){
-            res.send(401).json({message:"Not Authorized,Invalid token!!"});
-        }
-    }else{
-        res.send(401).json({message:"Not Authorized,No token!!"});
+
+    if (isBlacklisted(token)) {
+        return res.status(400).json({ message: "Token is invalid or logged out!" });
     }
-}
-module.exports = {protect};
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = await User.findById(decoded.id).select("-password");
+        next();
+    } catch (err) {
+        res.status(401).json({ message: "Not Authorized, Invalid token!" });
+    }
+};
+
+module.exports = { protect };
