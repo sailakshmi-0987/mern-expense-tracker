@@ -2,9 +2,9 @@ import React from 'react';
 import { FaMoneyBillWave, FaCalendarAlt, FaPiggyBank } from 'react-icons/fa';
 
 const SummaryCards = ({ totalExpenses }) => {
-    // You can add more complex logic here for monthly expenses, etc.
+    
     const monthlyExpenses = totalExpenses; 
-    const remainingBudget = 1500 - totalExpenses; // Example fixed budget
+    const remainingBudget = 1500 - totalExpenses; 
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Your custom CSS here */
+
 @import "tailwindcss";
 @plugin "daisyui";

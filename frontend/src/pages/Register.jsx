@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Register = () => {
-    const [name, setName] = useState(''); // changed from username to name
+    const [name, setName] = useState(''); 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -14,12 +14,8 @@ const Register = () => {
         setError('');
 
         try {
-            // Direct Axios call
             const response = await axios.post('http://localhost:5000/api/auth/register',{ name, email, password },{withCredentials:true});
-
             console.log(response.data);
-
-            // Redirect to login page on success
             navigate('/login');
 
         } catch (err) {

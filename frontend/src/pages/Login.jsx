@@ -13,7 +13,7 @@ const Login = () => {
         setError('');
 
         try {
-            // Axios POST request directly in this page
+            
             const response = await axios.post('http://localhost:5000/api/auth/login', { email, password },{withCredentials:true});
 
             // Store token and redirect

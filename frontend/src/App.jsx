@@ -11,7 +11,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          {/* Default route redirects to login */}
           <Route path="/" element={<Login />} />
         </Routes>
       </div>
