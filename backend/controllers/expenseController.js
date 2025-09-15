@@ -1,16 +1,14 @@
-//const {protect} = require("../middlewares/authMiddleware"); // Assuming this is commented out in your file
 const { getCategoryFromDescription } = require('../utils/aiCategory');
 const Expense = require("../models/Expense");
 
 const createExpense = async (req, res) => {
     try {
-        // Renamed 'title' to 'description' for consistency with frontend
         const { description, amount, category, date } = req.body;
         const finalCategory = category || await getCategoryFromDescription(description);
 
         const expense = new Expense({
             user: req.user._id,
-            title: description, // Assuming 'title' in your model should be 'description'
+            title: description, 
             amount,
             category: finalCategory,
             date
@@ -28,7 +26,6 @@ const fetchExpense = async (req, res) => {
     try {
         const { category, fromDate, toDate, minAmount, maxAmount } = req.query;
 
-        // Consistent use of req.user._id
         const filter = { user: req.user._id };
 
         if (category) {
@@ -60,7 +57,7 @@ const fetchExpense = async (req, res) => {
 const updateExpense = async (req, res) => {
     try {
         const expenseId = req.params.id;
-        const userId = req.user._id; // Consistent use of req.user._id
+        const userId = req.user._id; 
         const updatedData = req.body;
 
         const expense = await Expense.findOne({ _id: expenseId, user: userId });
@@ -69,10 +66,9 @@ const updateExpense = async (req, res) => {
             return res.status(404).json({ message: "Expense not found" });
         }
         
-        // Handle potential 'description' update from frontend
         if (updatedData.description) {
             updatedData.title = updatedData.description;
-            delete updatedData.description; // Remove description from data before assigning
+            delete updatedData.description; 
         }
 
         Object.assign(expense, updatedData);
@@ -88,9 +84,8 @@ const updateExpense = async (req, res) => {
 const deleteExpense = async (req, res) => {
     try {
         const expenseId = req.params.id;
-        const userId = req.user._id; // Consistent use of req.user._id
+        const userId = req.user._id;
 
-        // Mongoose 6+ has findOneAndDelete as a valid method
         const expense = await Expense.findOneAndDelete({ _id: expenseId, user: userId });
 
         if (!expense) {

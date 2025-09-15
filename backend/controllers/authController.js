@@ -2,16 +2,12 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { addToBlacklist } = require("../utils/tokenBlackList");
 
-// Generate JWT
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
     });
 };
 
-// @desc   Register a new user
-// @route  POST /api/auth/register
-// @access Public
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -27,9 +23,9 @@ const registerUser = async (req, res) => {
     // Set cookie
     res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // HTTPS only in production
+        secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        maxAge: 30 * 24 * 60 * 60 * 1000, 
     });
 
     res.status(201).json({
@@ -70,8 +66,7 @@ const logoutUser = (req, res) => {
         return res.status(400).json({ message: "No token provided" });
     }
 
-    addToBlacklist(token); // optional if you still want blacklist
-
+    addToBlacklist(token); 
     res.clearCookie("token", { httpOnly: true, sameSite: "strict" });
     res.status(200).json({ message: "Logged out successfully" });
 };
